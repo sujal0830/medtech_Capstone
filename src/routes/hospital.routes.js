@@ -1,35 +1,35 @@
-const router = require("express").Router();
-const controller = require("../controllers/hospital.controller");
-const { authenticate, authorize } = require("../middleware/auth.middleware");
+// const router = require("express").Router();
+// const controller = require("../controllers/hospital.controller");
+// const { authenticate, authorize } = require("../middleware/auth.middleware");
 
-/*
- Admin only
-*/
+// /*
+//  Admin only
+// */
 
-router.post(
-  "/",
-  authenticate,
-  authorize(["ADMIN"]),
-  controller.createHospital
-);
+// router.post(
+//   "/",
+//   authenticate,
+//   authorize(["ADMIN"]),
+//   controller.createHospital
+// );
 
-router.get(
-  "/",
-  authenticate,
-  controller.getHospitals
-);
+// router.get(
+//   "/",
+//   authenticate,
+//   controller.getHospitals
+// );
 
-router.post(
-  "/:id/departments",
-  authenticate,
-  authorize(["ADMIN"]),
-  controller.createDepartment
-);
+// router.post(
+//   "/:id/departments",
+//   authenticate,
+//   authorize(["ADMIN"]),
+//   controller.createDepartment
+// );
 
-router.get(
-  "/:id/departments",
-  authenticate,
-  controller.getDepartmentsByHospital
-);
+// router.get(
+//   "/:id/departments",
+//   authenticate,
+//   controller.getDepartmentsByHospital
+// );
 
-module.exports = router;
+// module.exports = router;
