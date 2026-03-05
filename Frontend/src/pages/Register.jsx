@@ -1,12 +1,13 @@
 import { useState } from "react";
 import API from "../services/api";
 
-export default function Register() {
+export default function Register({ switchToLogin }) {
 
   const [form, setForm] = useState({
     full_name: "",
     email: "",
     password: "",
+    confirm_password: "",
     user_type: "PATIENT"
   });
 
@@ -18,68 +19,145 @@ export default function Register() {
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
-    try {
-      console.log("Submitting:", form); // ✅ debug
+    // 🔒 password match validation
+    if (form.password !== form.confirm_password) {
+      alert("Passwords do not match");
+      return;
+    }
 
-      const response = await API.post(
-        "/auth/register",
-        form
-      );
+    try {
+
+      const response = await API.post("/auth/register", {
+        full_name: form.full_name,
+        email: form.email,
+        password: form.password,
+        user_type: form.user_type
+      });
 
       console.log(response.data);
+
       alert("Registered Successfully");
 
+      switchToLogin();
+
     } catch (error) {
+
       console.error(error);
+
       alert(
         error.response?.data?.message ||
         "Registration failed"
       );
+
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
 
-      <input
-        name="full_name"
-        placeholder="Name"
-        onChange={handleChange}
-        required
-      />
+    <div className="auth-card">
 
-      <input
-        name="email"
-        placeholder="Email"
-        onChange={handleChange}
-        required
-      />
+      <h3 className="text-center mb-3">
+        Create Account
+      </h3>
 
-      <input
-        name="password"
-        type="password"
-        placeholder="Password"
-        onChange={handleChange}
-        required
-      />
+      <form onSubmit={handleSubmit}>
 
-      <select
-        name="user_type"
-        onChange={handleChange}
-        value={form.user_type}
-      >
-        <option value="ADMIN">ADMIN</option>
-        <option value="PATIENT">PATIENT</option>
-        <option value="CONSULTANT">CONSULTANT</option>
-      </select>
+        {/* FULL NAME */}
+        <div className="mb-3">
+          <label className="form-label">Full Name</label>
 
-      {/* ✅ IMPORTANT */}
-      <button type="submit">
-        Register
-      </button>
+          <input
+            name="full_name"
+            className="form-control"
+            placeholder="Enter your name"
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-    </form>
+        {/* EMAIL */}
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+
+          <input
+            name="email"
+            type="email"
+            className="form-control"
+            placeholder="Enter your email"
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* PASSWORD */}
+        <div className="mb-3">
+          <label className="form-label">Password</label>
+
+          <input
+            name="password"
+            type="password"
+            className="form-control"
+            placeholder="Enter password"
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* CONFIRM PASSWORD */}
+        <div className="mb-3">
+          <label className="form-label">Confirm Password</label>
+
+          <input
+            name="confirm_password"
+            type="password"
+            className="form-control"
+            placeholder="Confirm password"
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        {/* USER TYPE */}
+        <div className="mb-3">
+          <label className="form-label">User Type</label>
+
+          <select
+            name="user_type"
+            className="form-select"
+            onChange={handleChange}
+            value={form.user_type}
+          >
+            <option value="PATIENT">Patient</option>
+            <option value="CONSULTANT">Consultant</option>
+            <option value="ADMIN">Admin</option>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          className="btn btn-primary w-100"
+        >
+          Register
+        </button>
+
+      </form>
+
+      <p className="text-center mt-3">
+
+        Already have an account?{" "}
+
+        <span
+          className="link-btn"
+          onClick={switchToLogin}
+        >
+          Login
+        </span>
+
+      </p>
+
+    </div>
   );
 }

@@ -1,18 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
+
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+
+        {/* Authentication Page */}
+        <Route path="/" element={<AuthPage />} />
+
       </Routes>
+
     </BrowserRouter>
-    </>
-    
   );
 }
 
